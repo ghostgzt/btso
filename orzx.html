@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://gentle.duapp.com/gentle_libs.js"></script>
+<script>
+			var ajax_url = 'http://gentle.cdn.duapp.com/ajax.php';
+			var page = 1;
+            var scontent = decodeURIComponent(window.location.hash.substring(1));
+			function getcode(str, p) {
+				if (!str) {
+					alert('请输入关键词！');
+					return false;
+				}
+				scontent = str;
+				window.location.hash = encodeURIComponent(scontent);
+				var ms = new Array();
+				ms[0] = "get"; //method
+				ms[1] = 0; //postdata
+				ms[2] = 0; //cookie
+				ms[3] = "http://www.baidu.com/"; //referer
+				ms[4] = 0; //proxy
+				ms[5] = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31"; //agent
+				var mshead = new Array();
+				mshead[0] = 'X-Requested-With:XMLHttpRequest';
+				ms[6] = mshead; //head
+				var xx = CrossScript(ajax_url, 'http://vips.3hoo.info/xbt.php?https://www.googleapis.com/customsearch/v1element?key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY&rsz=filtered_cse&num=20&hl=zh_CN&prettyPrint=false&source=gcsc&gss=.co&sig=cf717ce13f86fb2ebeed8f0046aba6ef&start='+((p-1)*20)+'&cx=000629500190816974387:rk6fohwmvyo&q='+str+'&googlehost=www.google.com&callback=google.search.Search.apiary7195&nocache=1375376193054', ms, 'ajax_ds', 'ajax_ds?getxjson(JSON.parse(ajax_ds.replace("// API callback","").replace("google.search.Search.apiary7195(","").replace(");","").trim())):alert("获取失败！");');
+				//prompt('x',xx);
+			}
+			getcode(scontent,1);
+			
+			function gethash(str){
+ var res = /FileHash\:(.*)\]/.exec(str);
+return res[1];
+}
+			function getview(id,type) {
+if(id.indexOf("list") > 0 )
+{
+    alert('此为列表资源,请点击详细！');
+}else{
+				
+				var ms = new Array();
+				ms[0] = "get"; //method
+				ms[1] = 0; //postdata
+				ms[2] = 0; //cookie
+				ms[3] = "http://www.baidu.com/"; //referer
+				ms[4] = 0; //proxy
+				ms[5] = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31"; //agent
+				var mshead = new Array();
+				mshead[0] = 'X-Requested-With:XMLHttpRequest';
+				ms[6] = mshead; //head
+				var xx = CrossScript(ajax_url, 'http://bt.orzx.co/Download.php?id='+id, ms, 'ajax_ds', 'ajax_ds?runhash(gethash(ajax_ds),'+type+'):alert("获取失败！");');
+				//prompt('x',xx);
+				}
+			}
+			function runhash(hash,type){
+			if(!hash){alert('获取失败！');}else{
+			switch (type){
+			case 0:
+			alert(hash);
+			break;
+			case 1:
+			prompt('复制链接','magnet:?xt=urn:btih:'+hash);
+			break;
+			case 2:
+			window.open('magnet:?xt=urn:btih:'+hash,'_blank');
+			break;
+			case 3:
+			window.open(getplayer()+encodeURIComponent('magnet:?xt=urn:btih:'+hash),'_blank');
+			break;
+			}
+			}
+			}
+			
+  function getpages(num){
+  var jn=0;
+  var jl='';
+  for(var i=1;i<parseInt(num)+1;i++){
+    jn=i;
+  jl+='<option value="'+i+'"'+(i==page?'selected':'')+'>第'+i+'页</option>';
+  }
+  if(page>jn){
+   jl+='<option value="'+page+'" selected>第'+page+'页</option>';
+  }
+return jl;
+  }			
+			
+			
+			
+			
+			
+function getxjson(content){
+runjson(content);
+}
+
+
+
+
+
+
+
+ function runjson(lis,tba){
+  document.body.innerHTML='';
+  document.writeln('<div style="margin-top:-8px;position:fixed;background:black;width:98%"><span id="ym">'+(page>1?'<a href="javascript:void();" onclick="page-=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">上一页</a>':'')+'&nbsp;<select onchange="page=parseInt(this.value);getcode(scontent,page);" style="width:100px;border:0;" id="spages" value="'+page+'">'+getpages(lis.cursor.pages.length)+'</select>&nbsp;结果:'+(lis.results.length-1)+'个');
+   document.writeln((document.getElementById('spages').length>page?('<a href="javascript:void;" onclick="page+=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">下一页</a>'):'')+'</span><span style="float:right;"><form method="post" style="height: 12px;"><a href="trtp.html#'+scontent+'" style="color:white;text-decoration:underline;">种子计划</a>&nbsp;<a href="btdigg.html#'+scontent+'" style="color:white;text-decoration:underline;">掘种资源</a>&nbsp;<a href="ktxp.html#'+scontent+'" style="color:white;text-decoration:underline;">种子资源</a>&nbsp;<a href="magnet.html#'+scontent+'" style="color:white;text-decoration:underline;">磁力影音</a>&nbsp;<a href="ed2k.html#'+scontent+'" style="color:white;text-decoration:underline;">电驴影音</a>&nbsp;<a href="javascript:void;" onclick="showsetbox();" style="color:white;text-decoration:underline;">设置</a>&nbsp;<a href="javascript:void;" onclick="getcode(scontent,page);" style="color:white;text-decoration:underline;">刷新</a>&nbsp;<a href="javascript:void;" onclick="scroll(0,0);" style="color:white;text-decoration:underline;">顶部</a>&nbsp;关键词<input value="'+scontent+'" id="search"/><input type="submit" value="搜索" onclick="page=1;scontent=document.getElementById(\'search\').value;getcode(scontent,page);"/></form></span></div><br><div style="background:black;width:100%">'+'</div><br>');
+   setbox();
+ var gn=Math.floor(document.body.scrollWidth/300);
+ var isji='top,';
+ 
+document.body.style.color='white';
+document.body.style.background='black';
+document.body.style.backgroundImage="url(http://img14.poco.cn/mypoco/myphoto/20130321/12/17338767320130321124216067.jpg)";
+for(var x=0;x<gn;x++){
+if(!isji){break;}
+var iq=Math.floor(x*(lis.results.length/gn));
+
+var ih=Math.floor((x+1)*(lis.results.length/gn));
+iq+=1;ih+=1;
+
+
+if(ih>lis.results.length){ih=lis.results.length;}
+if(gn>lis.results.length||gn==lis.results.length){iq=1;ih=lis.results.length;isji='';}
+   document.writeln('<span style="float:left">');
+    for(var i=iq;i<ih;i++){
+  document.writeln('<div style="overflow: hidden; float: ' + isji + 'left; width: 300px; height: 250px; padding: 10px; margin: 5px; border: 1px solid black;color:black; background-color: black; top: -50px; background-position: initial initial; background-repeat: initial initial;color:white;" onmouseover="this.getElementsByTagName(\'textarea\')[0].style.color=\'black\';this.getElementsByTagName(\'div\')[0].style.color=\'black\';this.style.color=\'black\';this.style.background=\'white\';this.style.height=\'527\';scroll(0,getAbsPoint(this,\'y\')-((document.body.offsetHeight-parseInt(this.style.height))/2));" onmouseout="this.getElementsByTagName(\'textarea\')[0].style.color=\'white\';this.getElementsByTagName(\'div\')[0].style.color=\'white\';this.style.color=\'white\';this.style.background=\'black\';this.style.height=\'250\';"><font face="arial"><p><textarea style="color:white;resize:none;background:transparent;width:300px;height:50px;border:0;font-family:arial;font-size:16px;" readonly>'+lis.results[i]['titleNoFormatting']+'</textarea></p><p><b>Detail</b>&nbsp;<div style="overflow: auto; color: white; width: 300px; height: 60px; border: 0px; font-family: arial; font-size: 16px; background-position: initial initial; background-repeat: initial initial;">'+lis.results[i]['content']+'</div></p><p><b>操作</b>&nbsp;<a style="color:black;text-decoration:underline;" href="javascript:void();" onclick="getview(\''+lis.results[i]['unescapedUrl'].replace('http://bt.orzx.co/display.php?id=','').replace('http://bt.orzx.co/view.php?id=','')+'\',3);">播放</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="javascript:void();" onclick="getview(\''+lis.results[i]['unescapedUrl'].replace('http://bt.orzx.co/display.php?id=','').replace('http://bt.orzx.co/view.php?id=','')+'\',2);">下载</a>&nbsp;<a style="color:black;text-decoration:underline;" href="javascript:void();" onclick="getview(\''+lis.results[i]['unescapedUrl'].replace('http://bt.orzx.co/display.php?id=','').replace('http://bt.orzx.co/view.php?id=','')+'\',1);">复制</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="' + lis.results[i]['unescapedUrl'] + '">详细</a></p><span style="float:right;margin-right:0;">'+i+'</span><p><b>H评价</b>&nbsp;'+(lis.results[i][5]=='2'?'很黄很暴力':(lis.results[i][5]=='1'?'爱情动作文艺片':'无节操视频'))+'</p><br><p><a title="'+lis.results[i]['titleNoFormatting']+'" href="javascript:void();" onclick="getview(\''+lis.results[i]['unescapedUrl'].replace('http://bt.orzx.co/display.php?id=','').replace('http://bt.orzx.co/view.php?id=','')+'\',3);"><img src="http://donkey4u.com/static/hexie.jpg" width="300px"/></a></p></font></div>');
+  }
+  document.writeln('</span>');
+  }
+document.writeln('<title>'+scontent+' - 磁力资源</title><style>#emotion{margin:5px 0;}input:focus::-webkit-input-placeholder,textarea:focus::-webkit-input-placeholder{color:transparent;}::-webkit-scrollbar-track-piece{background:#FFF;}::-webkit-scrollbar{width:3px;height:3px;}::-webkit-scrollbar-thumb{height:50px;background-color:#999;border:none;}::-webkit-scrollbar-thumb:hover{background-color:#666;}.readmore{display:none}</style>');
+  
+  }
+
+
+
+
+
+
+
+
+
+</script>

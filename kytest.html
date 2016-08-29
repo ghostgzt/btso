@@ -1,0 +1,25 @@
+﻿
+<script src="Scripts\jquery-1.4.1.js"></script>
+<script src="Scripts\jquery-1.4.1-vsdoc.js"></script>
+<script src="Scripts\ajaxf.js"></script>
+<script>
+$(document).ready(function() { 
+$.ajaxf.install('Scripts/ajax.swf'); 
+}); 
+
+
+</script>
+<script type="text/javascript"> 
+$(document).ready(function() { 
+$.ajaxf.install('Scripts/ajax.swf'); 
+$("#fdemo_get").click(function() { 
+$.ajaxf.getText("http://api.fanfou.com/", '', function(r) { 
+$("#fdemo").val(r); 
+}); 
+}); 
+}); 
+</script> 
+
+<textarea id='fdemo' style='width: 500px; height: 300px;'></textarea> 
+<br /> 
+<input type="button" value="获取数据" id='fdemo_get' /> 

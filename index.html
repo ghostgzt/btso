@@ -1,0 +1,7 @@
+﻿<script>
+function run(){var hs=window.location.hash;var t;if(!hs){t=prompt('下载地址','');}else{t=hs.substring(1);}
+if(t){window.location.hash=t;CrossScript('http://gentle.cdn.duapp.com/ajax.php','http://i.vod.xunlei.com/req_screensnpt_url?userid=2&url='+LittleUrl.encode(t),'ajax_get_baidu',"screensnpt(getdata(ajax_get_baidu));");}}
+function load(){var f=document.createElement("script");f.type="text/javascript";f.src='gentle_libs.js';document.getElementsByTagName("head")[0].appendChild(f);f.onload=f.onreadystatechange=function(){if(!this.readyState||this.readyState=='loaded'||this.readyState=='complete'){run();}
+f.onload=f.onreadystatechange=null;}}
+load();
+</script>

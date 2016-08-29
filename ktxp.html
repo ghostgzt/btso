@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://gentle.duapp.com/gentle_libs.js"></script>
+<script>
+			var ajax_url = 'http://gentle.cdn.duapp.com/ajax.php';
+			var page = 1;
+            var scontent = decodeURIComponent(window.location.hash.substring(1));
+			function getcode(str, p) {
+				if (!str) {
+					alert('请输入关键词！');
+					return false;
+				}
+				scontent = str;
+				window.location.hash = encodeURIComponent(scontent);
+				var ms = new Array();
+				ms[0] = "get"; //method
+				ms[1] = 0; //postdata
+				ms[2] = 0; //cookie
+				ms[3] = "http://www.baidu.com/"; //referer
+				ms[4] = 0; //proxy
+				ms[5] = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31"; //agent
+				var mshead = new Array();
+				mshead[0] = 'X-Requested-With:XMLHttpRequest';
+				ms[6] = mshead; //head
+				var xx = CrossScript(ajax_url, 'http://bt.ktxp.com/search.php?keyword='+encodeURIComponent(str)+'&page='+p, ms, 'ajax_ds', 'ajax_ds?getxjson(ajax_ds):alert("获取失败！");');
+			}
+			getcode(scontent,1);
+			
+			function gethash(str){
+ var res = /FileHash\:(.*)\]/.exec(str);
+return res[1];
+}
+			function getview(id,type) {
+runhash(id,type)
+			}
+			function runhash(hash,type){
+			if(!hash){alert('获取失败！');}else{
+			switch (type){
+			case 0:
+			alert(hash);
+			break;
+			case 1:
+			prompt('复制链接','magnet:?xt=urn:btih:'+hash);
+			break;
+			case 2:
+			window.open('http://bt.ktxp.com/down/'+hash+'.torrent','_blank');
+			break;
+			case 3:
+			window.open(getplayer()+encodeURIComponent('magnet:?xt=urn:btih:'+hash),'_blank');
+			break;
+			}
+			}
+			}
+			
+  function getpages(num){
+  var jn=0;
+  var jl='';
+  for(var i=1;i<parseInt(num)+1;i++){
+    jn=i;
+  jl+='<option value="'+i+'"'+(i==page?'selected':'')+'>第'+i+'页</option>';
+  }
+  if(page>jn){
+   jl+='<option value="'+page+'" selected>第'+page+'页</option>';
+  }
+return jl;
+  }
+function getxjson(content){
+var pages=0;
+try{
+pages = (/\<div\ class\=\"pages\ clear\ space\-top\"\>(.*?)\<\/div\>/.exec(content))[0];
+pages = (/class\=\"pager\-last\ active\"\ target\=\"\_self\"\>(.*?)\<\/a\>/.exec(pages))[1];
+}catch(e){}
+var res = content.replace(/<tr>/ig,'|*|').replace(/<\/tr>/ig,'|*|').replace(/\|\*\|\ \|\*\|/ig,'').split('|*|');
+var lis = new Array();
+lis[0]=1;
+try{
+lis[0]=pages;
+}catch(e){}
+for(var i=3;i<res.length;i++)
+{
+var rname ='';
+try{
+rname = (/target\=\"\_blank\"\>(.*?)\<\/a\>/.exec(res[i]))[1];
+if(rname){
+var rhash= (/\/down\/(.*)\.torrent/.exec(res[i]))[1];
+var rurl = (/\/html\/(.*?)\"/.exec(res[i]))[1];
+
+var rsize = (res[i].replace(/<td>/ig,'|*|').replace(/<\/td>/ig,'|*|').replace(/\|\*\|\ \|\*\|/ig,'').split('|*|'))[5];
+var rdate = (res[i].replace(/<td title="/ig,'|*|').replace(/">/ig,'|*|').replace(/\|\*\|\ \|\*\|/ig,'').split('|*|'))[1];
+var lia = '';
+					try{
+					lia=[(rname.trim()), rhash.trim(), (rurl.trim()), rsize.trim(), rdate.trim()];
+                    }catch(e){}
+					lis.push(lia);
+}}catch(e){}
+}
+runjson(lis);
+}
+ function runjson(lis,tba){
+  document.body.innerHTML='';
+  document.writeln('<div style="margin-top:-8px;position:fixed;background:black;width:98%"><span id="ym">'+(page>1?'<a href="javascript:void();" onclick="page-=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">上一页</a>':'')+'&nbsp;<select onchange="page=parseInt(this.value);getcode(scontent,page);" style="width:100px;border:0;" id="spages" value="'+page+'">'+getpages(lis[0])+'</select>&nbsp;结果:'+(lis.length-1)+'个');
+   document.writeln((document.getElementById('spages').length>page?('<a href="javascript:void;" onclick="page+=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">下一页</a>'):'')+'</span><span style="float:right;"><form method="post" style="height: 12px;"><a href="trtp.html#'+scontent+'" style="color:white;text-decoration:underline;">种子计划</a>&nbsp;<a href="btdigg.html#'+scontent+'" style="color:white;text-decoration:underline;">掘种资源</a>&nbsp;<a href="orzx.html#'+scontent+'" style="color:white;text-decoration:underline;">磁力资源</a>&nbsp;<a href="ed2k.html#'+scontent+'" style="color:white;text-decoration:underline;">电驴影音</a>&nbsp;<a href="magnet.html#'+scontent+'" style="color:white;text-decoration:underline;">磁力影音</a>&nbsp;<a href="javascript:void;" onclick="showsetbox();" style="color:white;text-decoration:underline;">设置</a>&nbsp;<a href="javascript:void;" onclick="getcode(scontent,page);" style="color:white;text-decoration:underline;">刷新</a>&nbsp;<a href="javascript:void;" onclick="scroll(0,0);" style="color:white;text-decoration:underline;">顶部</a>&nbsp;关键词<input value="'+scontent+'" id="search"/><input type="submit" value="搜索" onclick="page=1;scontent=document.getElementById(\'search\').value;getcode(scontent,page);"/></form></span></div><br><div style="background:black;width:100%">'+'</div><br>');
+   setbox();
+ var gn=Math.floor(document.body.scrollWidth/300);
+ var isji='top,';
+document.body.style.color='white';
+document.body.style.background='black';
+document.body.style.backgroundImage="url(http://img14.poco.cn/mypoco/myphoto/20130321/12/17338767320130321124216067.jpg)";
+for(var x=0;x<gn;x++){
+if(!isji){break;}
+var iq=Math.floor(x*(lis.length/gn));
+
+var ih=Math.floor((x+1)*(lis.length/gn));
+iq+=1;ih+=1;
+
+
+if(ih>lis.length){ih=lis.length;}
+if(gn>lis.length||gn==lis.length){iq=1;ih=lis.length;isji='';}
+   document.writeln('<span style="float:left">');
+    for(var i=iq;i<ih;i++){
+
+	try{
+  document.writeln('<div style="overflow: hidden; float: ' + isji + 'left; width: 300px; height: 250px; padding: 10px; margin: 5px; border: 1px solid black;color:black; background-color: black; top: -50px; background-position: initial initial; background-repeat: initial initial;color:white;" onmouseover="this.getElementsByTagName(\'textarea\')[0].style.color=\'black\';this.getElementsByTagName(\'div\')[0].style.color=\'black\';this.style.color=\'black\';this.style.background=\'white\';this.style.height=\'527\';scroll(0,getAbsPoint(this,\'y\')-((document.body.offsetHeight-parseInt(this.style.height))/2));" onmouseout="this.getElementsByTagName(\'textarea\')[0].style.color=\'white\';this.getElementsByTagName(\'div\')[0].style.color=\'white\';this.style.color=\'white\';this.style.background=\'black\';this.style.height=\'250\';"><font face="arial"><p><div style="overflow: auto; color: white; width: 300px; height: 50px; border: 0px; font-family: arial; font-size: 16; background-position: initial initial; background-repeat: initial initial;">'+lis[i][0]+'</div></p>'+'<p><b>Hash</b>&nbsp;<textarea style="color:white;resize:none;background:transparent;width:250px;height:17px;border:0;font-family:arial;font-size:16px;" readonly>'+lis[i][1].split('\/')[1]+'</textarea></p><p><b>Size</b> '+lis[i][3]+'</p><p><b>Date</b> '+lis[i][4]+'</p><p><b>操作</b>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="javascript:void();" onclick="getview(\''+lis[i][1].split('\/')[1]+'\',3);">播放</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="javascript:void();" onclick="getview(\''+lis[i][1]+'\',2);">下载</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="javascript:void();" onclick="getview(\''+lis[i][1].split('\/')[1]+'\',1);">复制</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="http://bt.ktxp.com/html/' + lis[i][2] + '">详细</a></p><span style="float:right;margin-right:0;">'+i+'</span><p><b>H评价</b>&nbsp;'+(lis[i][5]=='2'?'很黄很暴力':(lis[i][5]=='1'?'爱情动作文艺片':'无节操视频'))+'</p><br><p><a target="_blank" title="'+lis[i][0].replace('<span class="keyword">','').replace('</span>','')+'" href="javascript:void();" onclick="getview(\''+lis[i][1].split('\/')[1]+'\',3);"><img src="http://donkey4u.com/static/hexie.jpg" width="300px"/></a></p></font></div>');
+  }catch(e){}
+  }
+  document.writeln('</span>');
+  }
+document.writeln('<title>'+scontent+' - 种子资源</title><style>#emotion{margin:5px 0;}input:focus::-webkit-input-placeholder,textarea:focus::-webkit-input-placeholder{color:transparent;}::-webkit-scrollbar-track-piece{background:#FFF;}::-webkit-scrollbar{width:3px;height:3px;}::-webkit-scrollbar-thumb{height:50px;background-color:#999;border:none;}::-webkit-scrollbar-thumb:hover{background-color:#666;}.readmore{display:none}</style>');
+  
+  }
+</script>

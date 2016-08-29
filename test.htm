@@ -1,0 +1,15 @@
+<script src="gentle_libs.js"></script>
+<script>
+  var ms = new Array();
+  ms[0]="post";//method
+  ms[1]="fan_num=1000000&cursor=444";//postdata
+  ms[2]="PHPSESSID=TestAjax";//cookie
+  ms[3]="http://www.baidu.com/";//referer
+  ms[4]=0;//proxy
+  ms[5]="Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31";//agent
+  var mshead = new Array();
+  mshead[0]='X-Requested-With:XMLHttpRequest';
+  ms[6]=mshead;//head
+  //CrossScript('http://www.fuckit.asia/ajax.php','http://www.fuckit.asia/test.php',ms,'ajax_ds','alert(ajax_ds);');
+  prompt('x',getfile('http://127.0.0.1/screensnpt/ajax.php','http://thumb.donkey4u.com/18DE8C2C79676C0443FB6482A0AB248E/thumb.jpg','http://donkey4u.com/','image'));
+</script>

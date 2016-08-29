@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script src="http://gentle.duapp.com/gentle_libs.js">
+		</script>
+		<script>
+			var ajax_url = 'http://gentle.cdn.duapp.com/ajax.php';
+			var page = 1;
+			var scontent = decodeURIComponent(window.location.hash.substring(1));
+			function getcode(str, p) {
+				if (!str) {
+					alert('请输入关键词！');
+					return false;
+				}
+				scontent = str;
+				window.location.hash = encodeURIComponent(scontent);
+				var ms = new Array();
+				ms[0] = "get"; //method
+				ms[1] = 0; //postdata
+				ms[2] = 0; //cookie
+				ms[3] = "http://www.baidu.com/"; //referer
+				ms[4] = 0; //proxy
+				ms[5] = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31"; //agent
+				var mshead = new Array();
+				mshead[0] = 'X-Requested-With:XMLHttpRequest';
+				ms[6] = mshead; //head
+				var xx = CrossScript(ajax_url, 'http://donkey4u.com//search/' + encodeURIComponent(str) + '?page=' + p + '&mode=thumb', ms, 'ajax_ds', 'ajax_ds?getxjson(ajax_ds):alert("获取失败！");');
+				//prompt('x',xx);
+			}
+
+			getcode(scontent, page);
+
+			function getxjson(content) {
+		    	document.writeln('<body></body>');
+				document.body.innerHTML = '';
+				document.body.innerHTML = '<div><span style="float:right;"><form method="post" style="height: 12px;">关键词<input value="' + scontent + '" id="search"/><input type="submit" value="搜索" onclick="page=1;scontent=document.getElementById(\'search\').value;getcode(scontent,page);"/></form></span></div><iframe id="ifm" src="about:blank" style="display:none;"></iframe>';
+				document.getElementById("ifm").contentDocument.body.innerHTML=content;			
+				var lis = new Array();
+				lis[0]=0;
+				try{
+				var rootnod = document.getElementById("ifm").contentDocument.body.getElementsByTagName('div')[1];
+				var linod = rootnod.getElementsByTagName('li');
+				lis[0]=rootnod.getElementsByTagName('table')[2].getElementsByTagName('td')[0].innerHTML.replace(/结果总数 /ig, '').trim();	
+                }catch(e){
+				var linod='';
+				}		
+				 var o={ oText:function(obj){ var text; switch(typeof obj.innerText){ case 'string': text=obj.innerText; break; case 'undefined': text=obj.textContent; break; default: break; } return text; }, sText:function(obj,s){ switch(typeof obj.innerText){ case 'string': obj.innerText=s; break; case 'undefined': obj.textContent=s; break; } }, oHtml:function(obj){ return obj.innerHTML; }, sHtml:function(obj,s){ obj.innerHTML=s; } };
+				for (var $i0 = 0; $i0 < linod.length; $i0++) {
+
+					var lix = linod[$i0];
+					var lit = '';
+					try{
+					lit=o.oText(lix).replace(/下载链接: /ig, '').replace(/ED2K/ig, '').replace(/种子数: /ig, '').replace(/大小: /ig, '|').split('|');
+                    }catch(e){}
+					var lihash = lix.getAttribute('hash'); //hash
+					var lied2k = lix.getElementsByTagName('a')[lix.getElementsByTagName('a').length - 1].getAttribute('href'); //ed2k
+					var lisize = lit[1]; //size
+					var linum = lit[2]; //seednum
+					var liname = lied2k.split('|')[2]; //name
+					var lihexie = '2';
+					try {
+						lihexie = lix.getElementsByTagName('img')[0].getAttribute('src') == '/static/hexie.jpg' ? '1': '0'; //hexie
+					} catch(e) {}
+					var lia = '';
+					try{
+					lia=[(liname.trim()), lihash.trim(), (lied2k.trim()), lisize.trim(), linum.trim(), lihexie.trim()];
+                    }catch(e){}
+					lis.push(lia);
+				}
+
+				var tbnod = rootnod.getElementsByTagName('table');
+				var tdnod = tbnod[tbnod.length - 1].getElementsByTagName('td');
+				var tba = new Array();
+				for (var $t0 = 1; $t0 < tdnod.length; $t0++) {
+					var ss = '';
+					try{
+					ss=tdnod[$t0].getElementsByTagName('a')[0].innerHTML; //search
+					}catch(e){}
+					tba.push(ss);
+				}
+				runjson(lis, tba);
+			}
+			function getpages(num) {
+				var ppn = num / 20;
+				ppn = (ppn * 20 < num ? ppn += 1 : ppn = ppn);
+				var jl = '';
+				for (var i = 1; i < ppn + 1; i++) {
+					jl += '<option value="' + i + '"' + (i == page ? 'selected': '') + '>第' + i + '页</option>';
+				}
+				return jl;
+			}
+			function getkey(tba) {
+				var jl = '';
+				for (var i = 0; i < tba.length; i++) {
+					jl += '&nbsp;<a href="javascript:void();" onclick="page=1;scontent=\'' + tba[i] + '\';getcode(scontent,page);" style="color:white;text-decoration:underline;">' + tba[i] + '</a>';
+				}
+				return jl;
+			}
+
+			function runjson(lis, tba) {
+				document.body.innerHTML = '';
+				document.writeln('<div style="margin-top:-8px;position:fixed;background:black;width:98%"><span id="ym">' + (page > 1 ? '<a href="javascript:void();" onclick="page-=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">上一页</a>': '') + '&nbsp;<select onchange="page=this.value;getcode(scontent,page);" style="width:100px;border:0;" id="spages" value="' + page + '">' + getpages(lis[0]) + '</select>&nbsp;结果:' + lis[0] + '个');
+				document.writeln((document.getElementById('spages').length > page ? ('<a href="javascript:void;" onclick="page+=1;getcode(scontent,page);" style="color:white;text-decoration:underline;">下一页</a>') : '') + '</span><span style="float:right;"><form method="post" style="height: 12px;"><a href="trtp.html#'+scontent+'" style="color:white;text-decoration:underline;">种子计划</a>&nbsp;<a href="btdigg.html#'+scontent+'" style="color:white;text-decoration:underline;">掘种资源</a>&nbsp;<a href="ktxp.html#'+scontent+'" style="color:white;text-decoration:underline;">种子资源</a>&nbsp;<a href="orzx.html#'+scontent+'" style="color:white;text-decoration:underline;">磁力资源</a>&nbsp;<a href="magnet.html#'+scontent+'" style="color:white;text-decoration:underline;">磁力影音</a>&nbsp;<a href="javascript:void;" onclick="showsetbox();" style="color:white;text-decoration:underline;">设置</a>&nbsp;<a href="javascript:void;" onclick="getcode(scontent,page);" style="color:white;text-decoration:underline;">刷新</a>&nbsp;<a href="javascript:void;" onclick="scroll(0,0);" style="color:white;text-decoration:underline;">顶部</a>&nbsp;关键词<input value="' + scontent + '" id="search"/><input type="submit" value="搜索" onclick="page=1;scontent=document.getElementById(\'search\').value;getcode(scontent,page);"/></form></span></div><br><div style="background:black;width:100%">'+getkey(tba)+'</div>');
+				setbox();
+				var gn = Math.floor(document.body.scrollWidth / 300);
+				var isji = 'top,';
+                var stop=0;
+				document.body.style.color = 'white';
+				document.body.style.background = 'black';
+				document.body.style.backgroundImage = "url(http://img14.poco.cn/mypoco/myphoto/20130321/12/17338767320130321124216067.jpg)";
+				for (var x = 0; x < gn; x++) {
+					if (!isji) {
+						break;
+					}
+					var iq = Math.floor(x * (lis.length / gn));
+
+					var ih = Math.floor((x + 1) * (lis.length / gn));
+					iq += 1;
+					ih += 1;
+
+					if (ih > lis.length) {
+						ih = lis.length;
+					}
+					if (gn > lis.length || gn == lis.length) {
+						iq = 1;
+						ih = lis.length;
+						isji = '';
+					}
+					document.writeln('<span style="float:left">');
+					for (var i = iq; i < ih; i++) {
+						document.writeln('<div style="overflow: hidden; float: ' + isji + 'left; width: 300px; height: 250px; padding: 10px; margin: 5px; border: 1px solid black;color:black; background-color: black; top: -50px; background-position: initial initial; background-repeat: initial initial;" onmouseover="this.style.background=\'white\';this.style.height=\'527\';scroll(0,getAbsPoint(this,\'y\')-((document.body.offsetHeight-parseInt(this.style.height))/2));" onmouseout="this.style.background=\'black\';this.style.height=\'250\';"><p><a target="_blank" title="' + lis[i][0] + '" href="javascript:void();" onclick="window.open(getplayer() + encodeURIComponent(\''+lis[i][2]+'\'),\'_blank\');"><img src="' + (lis[i][5] != 2 ? getfile(ajax_url, 'http://thumb.donkey4u.com/' + lis[i][1] + '/thumb.jpg', 'http://donkey4u.com/', 'image/png') : 'http://donkey4u.com/static/hexie.jpg') + '" width="300px"/></a></p><br><p><textarea style="resize:none;background:transparent;width:300px;height:50px;border:0;" readonly>' + lis[i][0] + '</textarea></p><p><b>Hash</b>&nbsp;' + lis[i][1] + '</p><p><b>操作</b>&nbsp;<a style="color:black;text-decoration:underline;" href="javascript:void();" onclick="window.open(getplayer() + encodeURIComponent(\''+lis[i][2]+'\'),\'_blank\');">播放</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="' + lis[i][2] + '">下载</a>&nbsp;<a style="color:black;text-decoration:underline;" target="_blank" href="javascript:void();" onclick="prompt(\'请复制以下路径:\',\'' + lis[i][2] + '\');">复制</a></p><p><b>大小</b>&nbsp;' + lis[i][3] + '</p><p><b>种子数</b>&nbsp;' + lis[i][4] + '</p><span style="float:right;margin-right:0;">'+i+'</span><p><b>H评价</b>&nbsp;' + (lis[i][5] == '2' ? '很黄很暴力': (lis[i][5] == '1' ? '动作爱情文艺片': '无节操视频')) + '</p></div>');
+					}
+					document.writeln('</span>');
+				}
+				document.writeln('<title>' + scontent + ' - 电驴影音</title><style>#emotion{margin:5px 0;}input:focus::-webkit-input-placeholder,textarea:focus::-webkit-input-placeholder{color:transparent;}::-webkit-scrollbar-track-piece{background:#FFF;}::-webkit-scrollbar{width:3px;height:8px;}::-webkit-scrollbar-thumb{height:50px;background-color:#999;border:none;}::-webkit-scrollbar-thumb:hover{background-color:#666;}.readmore{display:none}</style>');
+
+			}
+		</script>
+	</head>
+	<body>
+	<script>document.writeln('<span style="float:right;"><form method="post" style="height: 12px;">关键词<input value="' + scontent + '" id="search"/><input type="submit" value="搜索" onclick="page=1;scontent=document.getElementById(\'search\').value;getcode(scontent,page);"/></form></span>');</script>
+	</body>
+
+</html>
